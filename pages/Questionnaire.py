@@ -25,7 +25,7 @@ age = st.slider("2. How old are you?", 15, 18, 15)
 
 # Academic Information
 st.subheader("Academic Information")
-average_time = st.slider("3. On average, how many hours per week do you study outside of the classroom?, 0, 25, 0)
+average_time = st.slider("3. On average, how many hours per week do you study outside of the classroom?", 0, 25, 0)
 st.markdown("**Disclaimer:** Please use the last 6 months of school as a reference.")
 absences = st.slider("4. How many days were you absent from school in the last 6 months?", 0, 30, 0)
 
