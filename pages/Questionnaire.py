@@ -29,7 +29,7 @@ average_time = st.slider("3. On average, how many hours per week do you study ou
 absences = st.slider("4. How many days were you absent from school in the last 6 months?", 0, 30, 0)
 
 tutoring = st.radio("5. Have you received any tutoring in the last 6 months? Parental support is not included", ["Yes","No"])
-tutoring_mapping = {"No": 0, "Yes": 1}
+tutoring_mapping = {"Yes": 1, "No": 0}
 tutoring_numeric = tutoring_mapping[tutoring]
 
 performance = st.slider("6. What is your current swiss Grade? You can use your average grade from the last semester as a reference.", min_value=1.0, max_value=6.0, step=0.05)
