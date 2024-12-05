@@ -11,7 +11,7 @@ st.write(" - Academic Information")
 st.write(" - Activities")
 st.write(" - Parental Support & Education")
 
-st.write(" Filling out the questionnaire will take approximately 5 to 10 minutes.")
+*(Filling out the questionnaire will take approximately 5 to 10 minutes.")
 
 st.markdown("---")
 
