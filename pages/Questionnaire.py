@@ -45,9 +45,12 @@ music = int("Music" in activities)
 volunteering = int("Volunteering" in activities)
 extracurricular = int("Extracurricular Activities" in activities)
 
-# Parental Support & Education
+# Parental Support & Educationst.subheader("Parental Support & Education")
 st.subheader("Parental Support & Education")
-support = st.select_slider("8. Rate the support from your parents:", ["No support", "Low", "Moderate", "High", "Very high"])
+support = st.selectbox(
+    "8. Rate the support from your parents:", 
+    ["No support", "Low", "Moderate", "High", "Very high"]
+)
 support_mapping = {"No support": 0, "Low": 1, "Moderate": 2, "High": 3, "Very high": 4}
 support_numeric = support_mapping[support]
 
