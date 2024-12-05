@@ -27,7 +27,7 @@ age = st.slider("2. How old are you?", 15, 18, 15)
 st.subheader("Academic Information")
 # Slider mit der Frage
 average_time = st.slider(
-    "3. On average, how many hours per week do you study outside of the classroom?", 
+    "**3. On average, how many hours per week do you study outside of the classroom?**", 
     0, 
     25, 
     0
