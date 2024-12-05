@@ -32,7 +32,7 @@ tutoring = st.radio("5. Have you received any tutoring in the last 6 months? Par
 tutoring_mapping = {"Yes": 1, "No": 0}
 tutoring_numeric = tutoring_mapping[tutoring]
 
-performance = st.slider("6. What is your current swiss Grade? You can use your average grade from the last semester as a reference.", min_value=1.0, max_value=6.0, step=0.05)
+performance = st.slider("6. What is your current Grade? You can use your average grade from the last semester as a reference.", min_value=1.0, max_value=6.0, step=0.05)
 
 # Activities
 st.subheader("Extracurricular Activities")
