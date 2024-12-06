@@ -278,6 +278,105 @@ if st.session_state.responses:
                 st.info("Click the button to display the table.")
 
 
+
+        st.markdown("<h5 style='font-size: 20px;'>Grade Prediction</h5>", unsafe_allow_html=True)
+
+
+        col3, col4 = st.columns(2)
+
+        with col3:
+            st.write("Figure 2: Predicted probabilities of grades")
+
+            if st.session_state.responses:
+                try:
+                    # Retrieve responses from session state
+                    age, gender_numeric, parental_degree_numeric, average_time, absences, tutoring_numeric, support_numeric, extracurricular, sports, music, volunteering, performance = st.session_state.responses
+
+                    def swiss_to_us_gpa(swiss_grade):
+                        return 2 + ((swiss_grade - 1) / 5) * 2
+
+                    swiss_grade = performance  # Example Swiss grade
+                    us_gpa = swiss_to_us_gpa(swiss_grade)
+
+                    scaler = load('scaler.pkl')  # Make sure to load the correct scaler (used during training)
+
+                    # Correct the new_data to have 12 features in each row
+                    new_data = np.array([
+                        [age, gender_numeric, parental_degree_numeric, average_time, absences, tutoring_numeric, support_numeric, extracurricular, sports, music, volunteering, us_gpa]
+                        # Add more rows for prediction if needed
+                    ])
+
+                    # Step 2: Apply the scaling to new data (using the previously fitted scaler)
+                    new_data_scaled = scaler.transform(new_data)  # Use transform to scale new data without fitting again
+
+                    # Step 3: Load the pre-trained model (if it's saved)
+                    def reassemble_file(output_file, chunk_files):
+                        with open(output_file, 'wb') as output:
+                            for chunk_file in chunk_files:
+                                with open(chunk_file, 'rb') as file:
+                                    output.write(file.read())
+
+                    chunk_files = [
+                        'random_forest_model.pkl.part0',
+                        'random_forest_model.pkl.part1',
+                        # Add other parts if applicable
+                    ]
+                    reassemble_file('random_forest_model.pkl', chunk_files)
+
+                    model = load('random_forest_model.pkl')  # Make sure to load the correct model
+
+                    # Step 4: Make predictions using the trained model
+                    predictions = model.predict(new_data_scaled)
+                    probabilities = model.predict_proba(new_data_scaled)
+
+                    # Step 6: Mapping grades to new values: 0 -> 6, 1 -> 5, 2 -> 4, 3 -> 3, 4 -> 2
+                    grade_mapping = {0: "5.5-6", 1: "4.5-5", 2: 4, 3: "3-4", 4: "1-3"}
+
+                    # Step 7: Custom color palette: white -> gray -> red
+                    color_palette = ['#a3f0a3', '#c9f7c9', '#f4e1a1', '#f8b4b4', '#ff7373']  # From light green to pastel red
+
+                    # Step 8: Output the predictions and probabilities and create pie charts
+                    import plotly.graph_objects as go
+
+                    # Create the pie chart using Plotly
+                    for i, (prediction, prob) in enumerate(zip(predictions, probabilities)):
+                        
+                        # Map the grade labels
+                        mapped_labels = [f'Grade: {grade_mapping[j]}' for j in range(len(prob))]
+
+                        # Get the highest probability and the corresponding grade
+                        max_prob_index = prob.argmax()  # Index of the highest probability
+                        max_prob = prob[max_prob_index]  # The highest probability value
+                        predicted_grade = grade_mapping[max_prob_index]  # The corresponding grade
+
+                        # Display the message with the highest probability grade
+                        # Create the pie chart
+                        fig = go.Figure(data=[go.Pie(
+                            labels=mapped_labels,
+                            values=prob,
+                            textinfo='label+percent',
+                            marker=dict(colors=color_palette),
+                            hoverinfo='label+percent'
+                        )])
+
+                        # Update the layout for better aesthetics
+                        fig.update_layout(
+                            showlegend=False,
+                            height=380,  # Adjust the height of the chart
+                            width=380,   # Adjust the width of the chart
+                            margin=dict(t=20, b=20, l=20, r=20)  # Set margins for a cleaner look
+                        )
+
+                        # Display the Plotly pie chart in Streamlit
+                        st.plotly_chart(fig, use_container_width=True)
+
+
+                except Exception as e:
+                    st.error(f"Error loading model or making predictions: {e}")
+            else:
+                st.warning("Please complete the questionnaire first!")
+
+
     except ValueError:
         # Handle error if unpacking fails (e.g., the list doesn't have 12 elements)
         st.error("Error: Incorrect number of responses or malformed data.")
