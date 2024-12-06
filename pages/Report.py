@@ -377,6 +377,28 @@ if st.session_state.responses:
                 st.warning("Please complete the questionnaire first!")
 
 
+        with col4: 
+            st.write("Table 2: Feature importance")
+            # Feature importances data
+            data = {
+                'Feature': ['Age', 'Gender', 'ParentalEducation', 'StudyTimeWeekly', 'Absences', 
+                            'Tutoring', 'ParentalSupport', 'Extracurricular', 'Sports', 'Music', 
+                            'Volunteering', 'GPA'],
+                'Importance (%)': [4.71, 2.35, 4.61, 6.88, 19.69, 2.68, 6.28, 2.03, 2.01, 1.37, 1.02, 46.36]
+            }
+
+            # Convert the data into a DataFrame
+            df = pd.DataFrame(data)
+
+            # Sort the DataFrame by 'Importance (%)' in descending order
+            df_sorted = df.sort_values(by='Importance (%)', ascending=False)
+            st.table(df_sorted.set_index('Feature'))  # Set 'Feature' as the index and remove default index display
+
+        # Display the table in Streamlit without the index
+
+        st.write(f"Based on the provided inputs, the model predicts a {max_prob:.1%} likelihood that your grade will be {predicted_grade}. This prediction is derived from an extensive analysis of historical performance data. Each feature contributes differently to predicting your grade. Focus on improving the most impactful ones for better results. Our tests show that the model achieves an accuracy of 91.02%, indicating a strong ability to predict outcomes reliably.")
+
+
     except ValueError:
         # Handle error if unpacking fails (e.g., the list doesn't have 12 elements)
         st.error("Error: Incorrect number of responses or malformed data.")
