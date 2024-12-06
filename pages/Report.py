@@ -184,6 +184,9 @@ with col2:
     import streamlit as st
     st.write("Table 1: Differences between inputs and average values")
 
+if st.button("Click the bottom to see more Details"):
+    open.table("questionnaire")
+    
     # Average values (replace with your actual average values)
     average_values = [
         16.46864548,  # Age
