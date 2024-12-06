@@ -399,16 +399,13 @@ if st.session_state.responses:
                 st.session_state['show_table1'] = not st.session_state['show_table1']
 
             if st.session_state['show_table1']:
-                st.table(df_differences.set_index('Feature'))
+                df_sorted = df.sort_values(by='Importance (%)', ascending=False)
+                st.table(df_sorted.set_index('Feature'))  # Set 'Feature' as the index and remove default index display
             else:
                 st.info("Click the button to display the table.")
 
 
-            df = pd.DataFrame(data)
-
             # Sort the DataFrame by 'Importance (%)' in descending order
-            df_sorted = df.sort_values(by='Importance (%)', ascending=False)
-            st.table(df_sorted.set_index('Feature'))  # Set 'Feature' as the index and remove default index display
 
         # Display the table in Streamlit without the index
 
