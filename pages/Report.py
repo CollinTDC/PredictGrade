@@ -180,14 +180,20 @@ with col1:
 # Second column: Additional content or prediction
 with col2:
 
-    import pandas as pd
-    import streamlit as st
+
+    # Initialize session state for button click
+    if 'show_table' not in st.session_state:
+        st.session_state['show_table'] = False
+
     # Button
     if st.button("Table 1: Differences between inputs and average values"):
+        st.session_state['show_table'] = not st.session_state['show_table']
+
+    if st.session_state['show_table']:
         st.dataframe(df)
     else:
         st.info("Click the button to display the table.")
-    
+
     # Average values (replace with your actual average values)
     average_values = [
         16.46864548,  # Age
