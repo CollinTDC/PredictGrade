@@ -1,3 +1,11 @@
+
+import streamlit as st
+import pandas as pd
+import numpy as np
+import plotly.express as px
+from joblib import load
+
+
 # Initialize session state for responses
 if 'responses' not in st.session_state:
     st.session_state.responses = None  # Default to None if not filled out yet
@@ -21,7 +29,6 @@ if st.session_state.responses:
         # First column: Visualization
         with col1:
             st.write("Figure 1: Inputs vs. overall average")
-
             # Radar chart logic here (use your existing radar chart code)
 
         # Second column: Additional content or prediction
