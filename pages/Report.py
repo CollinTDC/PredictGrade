@@ -203,6 +203,80 @@ if st.session_state.responses:
                 st.error(f"An unexpected error occurred: {e}")
 
 
+        with col2:
+
+            # Average values (replace with your actual average values)
+            average_values = [
+                16.46864548,  # Age
+                1.746237458,  # Parental Education
+                9.771991919,  # Weekly Study Time
+                14.54138796,  # Absences
+                2.122074,     # Parental Support
+                0.301421,     # Tutoring
+                4,            # GPA
+                0.303512,     # Sports
+                0.196906,     # Music
+                0.157191,     # Volunteering
+                0.383361      # Extracurricular Activities
+            ]
+
+            # Categories corresponding to the average values
+            categories = [
+                "Age", 
+                "Parental Education", 
+                "Weekly Study Time", 
+                "Absences", 
+                "Parental Support",
+                "Tutoring",
+                "GPA",
+                "Sports",
+                "Music",
+                "Volunteering",
+                "Extracurricular Activities"
+            ]
+
+            # Assuming `age`, `parental_degree_numeric`, `average_time`, etc. are defined elsewhere in your code
+
+            # Example inputs (replace with actual values from your user input)
+            user_input_values = [
+                age,  # Age
+                parental_degree_numeric,  # Parental Education
+                average_time,  # Weekly Study Time
+                absences,  # Absences
+                support_numeric,  # Parental Support
+                tutoring_numeric,  # Tutoring
+                performance,  # GPA
+                sports,  # Sports
+                music,  # Music
+                volunteering,  # Volunteering
+                extracurricular  # Extracurricular Activities
+            ]
+
+            # Calculate the differences from the average
+            differences = [user_input_values[i] - average_values[i] for i in range(len(user_input_values))]
+
+            # Create a DataFrame for displaying the differences
+            df_differences = pd.DataFrame({
+                "Feature": categories,
+                "Difference from Average": differences
+            })
+
+            # Display the differences in a table on Streamlit
+
+
+            # Initialize session state for button click
+            if 'show_table' not in st.session_state:
+                st.session_state['show_table'] = False
+
+            # Button
+            if st.button("Table 1: Differences between inputs and average values"):
+                st.session_state['show_table'] = not st.session_state['show_table']
+
+            if st.session_state['show_table']:
+                st.table(df_differences.set_index('Feature'))
+            else:
+                st.info("Click the button to display the table.")
+
 
     except ValueError:
         # Handle error if unpacking fails (e.g., the list doesn't have 12 elements)
