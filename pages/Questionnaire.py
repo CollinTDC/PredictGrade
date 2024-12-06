@@ -72,7 +72,7 @@ parental_degree = st.radio(
     "9. What is the highest education level your parents completed? ⚠️ *If your parents have different levels of education, please indicate the higher level of education!*", 
     ["No degree", "High School/Apprenticeship", "Bachelor's", "Master's", "PhD"]
 )
-degree_mapping = {"No degree": 0, "High School": 1, "Bachelor's": 2, "Master's": 3, "PhD": 4}
+degree_mapping = {"No degree": 0, "High School/Apprenticeship": 1, "Bachelor's": 2, "Master's": 3, "PhD": 4}
 parental_degree_numeric = degree_mapping[parental_degree]
 
 # Save inputs in order to make a prediction about the students grade.
