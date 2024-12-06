@@ -28,7 +28,7 @@ if st.session_state.responses:
             # Difference table and button logic here (use your existing logic for this)
 
         # Predicted Grades Section
-        st.markdown("<h5 style='font-size: 20px;'>Grade Prediction</h5>", unsafe_allow_html=True)
+
         col3, col4 = st.columns(2)
 
         # Predicted probabilities chart
