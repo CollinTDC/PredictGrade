@@ -395,10 +395,11 @@ if st.session_state.responses:
                 st.session_state['show_table1'] = False
 
             # Button
-            if st.button("Table 2: Differences between inputs and average values"):
+            if st.button("Table 2: Feature Importance"):
                 st.session_state['show_table1'] = not st.session_state['show_table1']
 
             if st.session_state['show_table1']:
+                df = pd.DataFrame(data)
                 df_sorted = df.sort_values(by='Importance (%)', ascending=False)
                 st.table(df_sorted.set_index('Feature'))  # Set 'Feature' as the index and remove default index display
             else:
