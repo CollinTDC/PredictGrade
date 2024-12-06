@@ -4,6 +4,7 @@ import pandas as pd
 import numpy as np
 import plotly.express as px
 from joblib import load
+import requests
 
 st.set_page_config(page_title="Report", layout="wide")
 
