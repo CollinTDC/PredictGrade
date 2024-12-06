@@ -256,6 +256,10 @@ st.markdown("<h5 style='font-size: 20px;'>Grade Prediction</h5>", unsafe_allow_h
 
 col3, col4 = st.columns(2)
 
+# Initialize session state for responses
+if 'responses' not in st.session_state:
+    st.session_state.responses = None  # Default to None if not filled out yet
+
 with col3:
     st.write("Figure 2: Predicted probabilities of grades")
 
@@ -347,7 +351,6 @@ with col3:
             st.error(f"Error loading model or making predictions: {e}")
     else:
         st.warning("Please complete the questionnaire first!")
-
 
 with col4: 
     st.write("Table 2: Feature importance")
