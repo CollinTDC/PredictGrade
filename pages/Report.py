@@ -184,7 +184,7 @@ with col2:
     import streamlit as st
     # Button
     if st.button("Table 1: Differences between inputs and average values"):
-    st.subheader("Table 1: Differences between inputs and average values"")
+    st.subheader("Table 1: Differences between inputs and average values")
     st.dataframe(df)
 else:
     st.info("Click the button to display the table.")
