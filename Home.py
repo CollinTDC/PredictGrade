@@ -8,7 +8,7 @@ from streamlit_extras.switch_page_button import switch_page
 
 st.set_page_config(page_title="Home", layout="wide")
 
-# Session state to track responses
+# Session state to track and save responses
 if 'responses' not in st.session_state:
     st.session_state.responses = []
 
