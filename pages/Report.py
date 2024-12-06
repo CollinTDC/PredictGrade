@@ -388,6 +388,22 @@ if st.session_state.responses:
             }
 
             # Convert the data into a DataFrame
+
+
+                        # Initialize session state for button click
+            if 'show_table1' not in st.session_state:
+                st.session_state['show_table1'] = False
+
+            # Button
+            if st.button("Table 1: Differences between inputs and average values"):
+                st.session_state['show_table1'] = not st.session_state['show_table1']
+
+            if st.session_state['show_table1']:
+                st.table(df_differences.set_index('Feature'))
+            else:
+                st.info("Click the button to display the table.")
+
+
             df = pd.DataFrame(data)
 
             # Sort the DataFrame by 'Importance (%)' in descending order
