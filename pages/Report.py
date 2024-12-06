@@ -182,7 +182,6 @@ with col2:
 
     import pandas as pd
     import streamlit as st
-    if st.button(" Table 1:Differences between inputs and average values")
     # Button
     if st.button("Table 1: Differences between inputs and average values"):
     st.subheader("Table 1: Differences between inputs and average values"")
