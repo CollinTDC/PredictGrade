@@ -180,20 +180,6 @@ with col1:
 # Second column: Additional content or prediction
 with col2:
 
-
-    # Initialize session state for button click
-    if 'show_table' not in st.session_state:
-        st.session_state['show_table'] = False
-
-    # Button
-    if st.button("Table 1: Differences between inputs and average values"):
-        st.session_state['show_table'] = not st.session_state['show_table']
-
-    if st.session_state['show_table']:
-        st.dataframe(df)
-    else:
-        st.info("Click the button to display the table.")
-
     # Average values (replace with your actual average values)
     average_values = [
         16.46864548,  # Age
@@ -251,7 +237,20 @@ with col2:
     })
 
     # Display the differences in a table on Streamlit
-    st.table(df_differences.set_index('Feature'))
+
+
+    # Initialize session state for button click
+    if 'show_table' not in st.session_state:
+        st.session_state['show_table'] = False
+
+    # Button
+    if st.button("Table 1: Differences between inputs and average values"):
+        st.session_state['show_table'] = not st.session_state['show_table']
+
+    if st.session_state['show_table']:
+        st.table(df_differences.set_index('Feature'))
+    else:
+        st.info("Click the button to display the table.")
 
 st.markdown("<h5 style='font-size: 20px;'>Grade Prediction</h5>", unsafe_allow_html=True)
 
