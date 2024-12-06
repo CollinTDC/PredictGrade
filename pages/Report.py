@@ -182,7 +182,7 @@ with col2:
 
     import pandas as pd
     import streamlit as st
-    st.write("Table 1: Differences between inputs and average values")
+    if st.button(" Table 1:Differences between inputs and average values")
     
     # Average values (replace with your actual average values)
     average_values = [
