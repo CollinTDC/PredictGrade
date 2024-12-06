@@ -93,89 +93,109 @@ with col1:
     # Average values for comparison (you can adjust these based on your data)
     average_values = [16.46864548, 1.746237458, 9.771991919, 14.54138796, 2.122074, 0.301421, 4, 0.303512, 0.196906, 0.157191, 0.383361]
 
-    if st.session_state.responses:
-        try:
-            # Retrieve responses from session state
-            age, gender_numeric, parental_degree_numeric, average_time, absences, tutoring_numeric, support_numeric, extracurricular, sports, music, volunteering, performance = st.session_state.responses
-        except ValueError:
-            # Handle error if unpacking fails (e.g., the list doesn't have 12 elements)
-            st.write("Error: Incorrect number of responses or malformed data.")
-    else:
-        st.write("Please fill out the questionnaire first.")
+    # Initialize session state for responses
+    if 'responses' not in st.session_state:
+        st.session_state.responses = None  # Default to None if not filled out yet
 
+    # Radar chart logic
+    try:
+        if st.session_state.responses:
+            try:
+                # Retrieve responses from session state
+                age, gender_numeric, parental_degree_numeric, average_time, absences, tutoring_numeric, support_numeric, extracurricular, sports, music, volunteering, performance = st.session_state.responses
+            except ValueError:
+                # Handle error if unpacking fails (e.g., the list doesn't have 12 elements)
+                st.error("Error: Incorrect number of responses or malformed data.")
+                st.stop()  # Stop execution if the responses are malformed
 
-    # User's values based on their inputs
-    user_values = [age, parental_degree_numeric, average_time, absences, support_numeric, tutoring_numeric, performance, sports, music, volunteering, extracurricular]
+            # User's values based on their inputs
+            user_values = [age, parental_degree_numeric, average_time, absences, support_numeric, tutoring_numeric, performance, sports, music, volunteering, extracurricular]
 
-    # Normalize the user values and the average values
-    def normalize(value, category):
-        return (value - min_values[category]) / (max_values[category] - min_values[category])
+            # Define categories and normalization logic
+            categories = ['Age', 'Parental Degree', 'Average Time', 'Absences', 'Support', 'Tutoring', 
+                        'Performance', 'Sports', 'Music', 'Volunteering', 'Extracurricular']
+            average_values = [25, 1, 2.5, 5, 0.7, 0.5, 4, 0.3, 0.2, 0.4, 0.6]  # Example average values
+            min_values = {'Age': 10, 'Parental Degree': 0, 'Average Time': 0, 'Absences': 0, 
+                        'Support': 0, 'Tutoring': 0, 'Performance': 1, 'Sports': 0, 
+                        'Music': 0, 'Volunteering': 0, 'Extracurricular': 0}
+            max_values = {'Age': 50, 'Parental Degree': 2, 'Average Time': 5, 'Absences': 20, 
+                        'Support': 1, 'Tutoring': 1, 'Performance': 6, 'Sports': 1, 
+                        'Music': 1, 'Volunteering': 1, 'Extracurricular': 1}
 
-    # Apply normalization
-    normalized_user_values = [normalize(value, category) for value, category in zip(user_values, categories)]
-    normalized_average_values = [normalize(value, category) for value, category in zip(average_values, categories)]
+            # Normalize the user values and the average values
+            def normalize(value, category):
+                return (value - min_values[category]) / (max_values[category] - min_values[category])
 
-    # Close the radar chart by adding the first category again
-    categories += [categories[0]]
-    normalized_user_values += [normalized_user_values[0]]
-    normalized_average_values += [normalized_average_values[0]]
+            # Apply normalization
+            normalized_user_values = [normalize(value, category) for value, category in zip(user_values, categories)]
+            normalized_average_values = [normalize(value, category) for value, category in zip(average_values, categories)]
 
-    # Create DataFrames for both user inputs and average values
-    df_user = pd.DataFrame({
-        'Category': categories,
-        'Value': normalized_user_values,
-        'Type': ['Your Inputs'] * len(categories)
-    })
+            # Close the radar chart by adding the first category again
+            categories += [categories[0]]
+            normalized_user_values += [normalized_user_values[0]]
+            normalized_average_values += [normalized_average_values[0]]
 
-    df_average = pd.DataFrame({
-        'Category': categories,
-        'Value': normalized_average_values,
-        'Type': ['Average'] * len(categories)
-    })
+            # Create DataFrames for both user inputs and average values
+            df_user = pd.DataFrame({
+                'Category': categories,
+                'Value': normalized_user_values,
+                'Type': ['Your Inputs'] * len(categories)
+            })
 
-    # Combine both DataFrames
-    df_combined = pd.concat([df_average, df_user])
+            df_average = pd.DataFrame({
+                'Category': categories,
+                'Value': normalized_average_values,
+                'Type': ['Average'] * len(categories)
+            })
 
-    # Plot radar chart using Plotly
-    fig = px.line_polar(
-        df_combined, 
-        r='Value', 
-        theta='Category', 
-        color='Type', 
-        line_close=True
-    )
+            # Combine both DataFrames
+            df_combined = pd.concat([df_average, df_user])
 
-    # Customize radar chart appearance
-    fig.update_layout(
-        polar=dict(
-            bgcolor="white",  
-            radialaxis=dict(
-                visible=True,
-                range=[0, 1]
-            ),
-            angularaxis=dict(
-                visible=True
+            # Plot radar chart using Plotly
+            fig = px.line_polar(
+                df_combined, 
+                r='Value', 
+                theta='Category', 
+                color='Type', 
+                line_close=True
             )
-        ),
-    )
 
-    # Set fill color for user input and average areas
-    fig.update_traces(
-        fill='toself',
-        fillcolor="rgba(180, 180, 180, 0.4)",  
-        line_color="gray",  
-        selector=dict(name="Average")
-    )
+            # Customize radar chart appearance
+            fig.update_layout(
+                polar=dict(
+                    bgcolor="white",  
+                    radialaxis=dict(
+                        visible=True,
+                        range=[0, 1]
+                    ),
+                    angularaxis=dict(
+                        visible=True
+                    )
+                ),
+            )
 
-    fig.update_traces(
-        fill='toself',
-        fillcolor="rgba(225, 130, 180, 0.4)",  
-        line_color="red",  
-        selector=dict(name="Your Inputs")
-    )
+            # Set fill color for user input and average areas
+            fig.update_traces(
+                fill='toself',
+                fillcolor="rgba(180, 180, 180, 0.4)",  
+                line_color="gray",  
+                selector=dict(name="Average")
+            )
 
-    # Display chart
-    st.plotly_chart(fig, use_container_width=True)
+            fig.update_traces(
+                fill='toself',
+                fillcolor="rgba(225, 130, 180, 0.4)",  
+                line_color="red",  
+                selector=dict(name="Your Inputs")
+            )
+
+            # Display chart
+            st.plotly_chart(fig, use_container_width=True)
+        else:
+            st.warning("Please fill out the questionnaire first.")
+    except Exception as e:
+        st.error(f"An unexpected error occurred: {e}")
+
 
 # Second column: Additional content or prediction
 with col2:
