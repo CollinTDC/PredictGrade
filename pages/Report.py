@@ -399,9 +399,14 @@ if st.session_state.responses:
 
             if st.session_state['show_table1']:
                 df = pd.DataFrame(data)
-                df['Importance (%)'] = df['Importance (%)'].round(1)  # Round to one decimal place
                 df_sorted = df.sort_values(by='Importance (%)', ascending=False)
-                st.table(df_sorted.set_index('Feature'))  # Set 'Feature' as the index and remove default index display
+
+                # Format the DataFrame to display one decimal point
+                df_formatted = df_sorted.set_index('Feature').style.format("{:.1f}", subset=['Importance (%)'])
+
+                # Display the formatted table in Streamlit
+                st.table(df_formatted)
+
             else:
                 st.info("Click the button to display the table.")
 
