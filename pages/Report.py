@@ -184,10 +184,10 @@ with col2:
     import streamlit as st
     # Button
     if st.button("Table 1: Differences between inputs and average values"):
-    st.subheader("Table 1: Differences between inputs and average values")
-    st.dataframe(df)
-else:
-    st.info("Click the button to display the table.")
+        st.subheader("Table 1: Differences between inputs and average values")
+        st.dataframe(df)
+    else:
+        st.info("Click the button to display the table.")
     
     # Average values (replace with your actual average values)
     average_values = [
