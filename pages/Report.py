@@ -15,6 +15,8 @@ if st.session_state.responses:
         # Retrieve responses from session state
         age, gender_numeric, parental_degree_numeric, average_time, absences, tutoring_numeric, support_numeric, extracurricular, sports, music, volunteering, performance = st.session_state.responses
 
+        st.write("hello")
+
     except ValueError:
         # Handle error if unpacking fails (e.g., the list doesn't have 12 elements)
         st.error("Error: Incorrect number of responses or malformed data.")
