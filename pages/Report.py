@@ -399,6 +399,7 @@ if st.session_state.responses:
 
             if st.session_state['show_table1']:
                 df = pd.DataFrame(data)
+                df['Importance (%)'] = df['Importance (%)'].round(1)  # Round to one decimal place
                 df_sorted = df.sort_values(by='Importance (%)', ascending=False)
                 st.table(df_sorted.set_index('Feature'))  # Set 'Feature' as the index and remove default index display
             else:
