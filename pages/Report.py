@@ -1,11 +1,3 @@
-
-import streamlit as st
-import pandas as pd
-import numpy as np
-import plotly.express as px
-from joblib import load
-
-
 # Initialize session state for responses
 if 'responses' not in st.session_state:
     st.session_state.responses = None  # Default to None if not filled out yet
@@ -39,10 +31,12 @@ if st.session_state.responses:
         st.markdown("<h5 style='font-size: 20px;'>Grade Prediction</h5>", unsafe_allow_html=True)
         col3, col4 = st.columns(2)
 
+        # Predicted probabilities chart
         with col3:
             st.write("Figure 2: Predicted probabilities of grades")
             # Prediction chart logic here (use your existing prediction logic)
 
+        # Feature importance table
         with col4:
             st.write("Table 2: Feature importance")
             # Feature importance logic here (use your existing logic)
