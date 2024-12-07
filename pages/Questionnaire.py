@@ -16,6 +16,8 @@ st.write("*Filling out the questionnaire will take approximately 5 to 10 minutes
 
 st.markdown("---")
 
+# For the questionnaire, we consciously chose to include different kinds of tools for user interaction in order to improve user experience.
+# Each question gathers data that is used for the subsequent calculation of a predicted grade range. Each information is thereby weighted differently, based on importance.
 # First section: Personal Information to extract first relevant data for the subsequent grade calculation.
 st.subheader("Personal Information")
 gender = st.radio("1. What is your gender?", ["Male", "Female"])
@@ -44,7 +46,8 @@ tutoring_numeric = tutoring_mapping[tutoring]
 performance = st.slider("6. What is your current grade? ⚠️ *You can use your average grade from the last semester as a reference!*", min_value=1.0, max_value=6.0, step=0.05)
 
 # Third section: Activities besides school. This helps us in order to extract more than just school-related data.
-# Multiselector to select all extracurricular activities one participates in.
+# Multiselector to select all extracurricular activities one participates in. The multiselector allows users to select more than 1 activity.
+# Each activity is weighted differently for the subsequent calculation of the predicted grade.
 st.subheader("Extracurricular Activities")
 activities = st.multiselect(
     "7. Which activities do you participate in? ⚠️ *You can choose up to 4!*",
@@ -56,7 +59,7 @@ volunteering = int("Volunteering" in activities)
 extracurricular = int("Extracurricular Activities" in activities)
 
 # Fourth section: Questions about Parental Support & Education, which also has influence on the students performance in school.
-# Selectbox to rate the support the student gets from his parents regarding academic purposes. Ranging from No support to Very high support.
+# We use a Selectbox to rate the support the student gets from his parents regarding academic purposes. Ranging from No support to Very high support.
 # The chosen support level will then be mapped to numbers. This is to make the grade calculation and data visualization easier to implement.
 st.subheader("Parental Support & Education")
 support = st.selectbox(
@@ -75,11 +78,12 @@ parental_degree = st.radio(
 degree_mapping = {"No degree": 0, "High School/Apprenticeship": 1, "Bachelor's": 2, "Master's": 3, "PhD": 4}
 parental_degree_numeric = degree_mapping[parental_degree]
 
-# Save inputs in order to make a prediction about the students grade.
+# Here, we save inputs in order to make a prediction about the students grade.
 st.session_state.responses = [
     age, gender_numeric, parental_degree_numeric, average_time, absences, tutoring_numeric, 
     support_numeric, extracurricular, sports, music, volunteering, performance
 ]
 
+# This if statement serves the purpose that the user will automatically be redirected to the page 'Report' when the 'Get results' button is pressed.
 if st.button("Get results"):
     switch_page("Report")
