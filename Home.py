@@ -13,7 +13,7 @@ if 'responses' not in st.session_state:
     st.session_state.responses = []
 
 # Title, Header and Markdown containing strings to welcome users to our Web-Application. 
-# At the bottom of the page, a button to navigate directly to the questionnaire is displayed.
+# At the bottom of the page, a button to navigate directly to the questionnaire is displayed, making the platform userfriendly to navigate.
 st.title("Welcome to GradeBoost! 🚀")
 st.header("Analyse and boost your semester performance")
 st.markdown("""
