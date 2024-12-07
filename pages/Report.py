@@ -12,10 +12,11 @@ st.title("Analysis of Results")
 st.markdown("---")
 
 
-# api to display current date
+# API to display current date, which is relevant if the student wants to track the progress of his predicted grades throughout the semester.
 
 url = "http://worldtimeapi.org/api/timezone/Etc/UTC"
 
+# This sends an HTTP-request to the URL in order to extract the actual date. If the request isn't succesfull, an error message is displayed.
 try:
     response = requests.get(url)
     response.raise_for_status()  # Raise an HTTPError for bad responses
