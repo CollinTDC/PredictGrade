@@ -34,26 +34,28 @@ except ValueError:
 if 'responses' not in st.session_state:
     st.session_state.responses = None  # Default to None if not filled out yet
 
-# Display report section only if responses are available
+# If statement to display report section only if responses from the questionnaire are available
 if st.session_state.responses:
     try:
-        # Retrieve responses from session state
+        # Retrieve saved responses of the following questions from session state
         age, gender_numeric, parental_degree_numeric, average_time, absences, tutoring_numeric, support_numeric, extracurricular, sports, music, volunteering, performance = st.session_state.responses
 
+        # Title of the report that will be displayed. Today's date will be extracted through the aforementioned API.
+        # The radar-chart will display the saved responses from the questionnaire and compare the responses to the overall average of each factor.
         st.subheader(f"Report of {today_date}")
         st.write("Below is a comparison of your inputs against the overall average (see Figure 1) and your predicted grade based on your inputs (see Figure 2).")
         st.write("")
         st.write("")
         st.markdown("<h5 style='font-size: 20px;'>Deviation From Averages</h5>", unsafe_allow_html=True)
 
-
+        # Generate a table with 2 columns
         col1, col2 = st.columns(2)
 
         with col1:
 
             st.write("Figure 1: Inputs vs. overall average")
 
-            # Categories and Min/Max values
+            # Define categories (these are based on the questions in the questionnaire) and Min/Max values
             categories = [
                 "Age", 
                 "Parental Education", 
