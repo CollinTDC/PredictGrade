@@ -74,10 +74,6 @@ if st.session_state.responses:
                     # User's values based on their inputs
                     user_values = [age, parental_degree_numeric, average_time, absences, support_numeric, tutoring_numeric, performance, sports, music, volunteering, extracurricular]
 
-
-
-
-
                     # Define categories (these are based on the questions in the questionnaire) and Min/Max values
                     categories = [
                         "Age", 
