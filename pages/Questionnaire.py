@@ -45,7 +45,7 @@ average_time = st.slider("3. On average, how many hours per week do you study ou
 #(API Reference/Input widgets - Streamlit Docs)
 absences = st.slider("4. How many days were you absent from school in the last 6 months?", 0, 30, 0)
 
-# Yes/No question with radio buttons to get to know if the student claimed tutoring in the last 6 months.
+#Yes/No question with radio buttons to get to know if the student claimed tutoring in the last 6 months.
 #(API Reference/Input widgets - Streamlit Docs)
 tutoring = st.radio("5. Have you received any tutoring in the last 6 months? Parental support is not included", ["No","Yes"])
 tutoring_mapping = {"No": 0, "Yes": 1}
