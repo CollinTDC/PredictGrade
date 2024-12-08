@@ -3,7 +3,7 @@ from streamlit_extras.switch_page_button import switch_page
 
 st.set_page_config(page_title="Questionnaire", layout="wide")
 
-# Title and disclaimer how the questionnaire is structured.
+# Title and disclaimer how the questionnaire is structured (API Reference/Text elements/Write and Magic - Streamlit Docs).
 st.title("Questionnaire")
 st.write("To calculate your grade for the upcoming semester, please complete the questionnaire.")
 st.write("The questionnaire is divided into the following four sections:")
@@ -12,19 +12,22 @@ st.write(" - Academic Information")
 st.write(" - Activities")
 st.write(" - Parental Support & Education")
 
+#(API Reference/Write and Magic - Streamlit Docs)
 st.write("*Filling out the questionnaire will take approximately 5 to 10 minutes.*")
 
+#(API Reference/Text elements - Streamlit Docs)
 st.markdown("---")
 
-# For the questionnaire, we consciously chose to include different kinds of tools for user interaction in order to improve user experience.
-# Each question gathers data that is used for the subsequent calculation of a predicted grade range. Each information is thereby weighted differently, based on importance.
-# First section: Personal Information to extract first relevant data for the subsequent grade calculation.
+#For the questionnaire, we consciously chose to include different kinds of tools for user interaction in order to improve user experience.
+#Each question gathers data that is used for the subsequent calculation of a predicted grade range. Each information is thereby weighted differently, based on importance.
+#First section: Personal Information to extract first relevant data for the subsequent grade calculation.
+#(API Reference/Text elements/Input widgets - Streamlit Docs)
 st.subheader("Personal Information")
 gender = st.radio("1. What is your gender?", ["Male", "Female"])
 gender_mapping = {"Male": 0, "Female": 1}
 gender_numeric = gender_mapping[gender]
 
-# Because our target group are students between 15 and 18 years, the slider can be used to select an age in that range. Default is 15.
+#Because our target group are students between 15 and 18 years, the slider can be used to select an age in that range. Default is 15.
 age = st.slider("2. How old are you?", 15, 18, 15)
 
 # Second section: Academic Information to get data about the average study time per week, absences, tutoring, as well as the current GPA of the student.
