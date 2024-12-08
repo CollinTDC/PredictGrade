@@ -16,7 +16,7 @@ st.markdown("---")
 
 url = "http://worldtimeapi.org/api/timezone/Etc/UTC"
 
-# This sends an HTTP-request to the URL in order to extract the actual date. If the request isn't succesfull, an error message is displayed.
+# This sends an HTTP-request to the URL in order to extract the actual date. If the request isn't succesful, an error message is displayed.
 try:
     response = requests.get(url)
     response.raise_for_status()  # Raise an HTTPError for bad responses
@@ -427,3 +427,46 @@ if st.session_state.responses:
 else:
     # Message if the questionnaire has not been completed
     st.warning("Please complete the questionnaire to view your report.")
+
+st.markdown("---")
+
+st.subheader("Save Report")
+# Display the email input field
+email = st.text_input("Please enter your email address to save your report.")
+
+import os
+
+st.write(os.getenv("MAIL_API"))
+# Display the button
+if st.button("Submit"):
+    if email:
+
+        import os
+        from sendgrid import SendGridAPIClient
+        from sendgrid.helpers.mail import Mail
+        
+        # SendGrid API-Key
+        SENDGRID_API_KEY = os.getenv("SENDGRID_API_KEY")  # Auf SendGrid generierter API-Key
+        
+        # Funktion, um eine E-Mail zu senden
+        def send_email(user_email, note):
+            message = Mail(
+                from_email='gradeboostapp@gmail.com',  # Absenderadresse
+                to_emails=email,
+                subject='Deine prognostizierte Note',
+                html_content=f'''<strong>Deine prognostizierte Note beträgt: {note}</strong>
+                            <br><br>
+                            Danke, dass du GradeBoost🚀 nutzt!'''
+            )
+            try:
+                sg = SendGridAPIClient(SENDGRID_API_KEY)
+                response = sg.send(message)
+                st.write(f"E-Mail erfolgreich gesendet! Status Code: {response.status_code}")
+            except Exception as e:
+                st.write(f"Fehler beim Senden der E-Mail: {e}")
+        
+        # Mail wird gesendet, indem die Funktion aufgerufen wird
+        send_email(email, predicted_grade)
+
+    else:
+        st.write("Please enter an email address.")
