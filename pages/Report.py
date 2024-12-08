@@ -7,20 +7,21 @@ from joblib import load
 import requests
 import os
 
+#(API Reference/Configuration - Streamlit Docs)
 st.set_page_config(page_title="Report", layout="wide")
 
+#(API Reference/Text elements - Streamlit Docs)
 st.title("Analysis of Results")
 st.markdown("---")
 
 
-# API to display current date, which is relevant if the student wants to track the progress of his predicted grades throughout the semester.
-
+#API to display current date, which is relevant if the student wants to track the progress of his predicted grades throughout the semester.
 url = "http://worldtimeapi.org/api/timezone/Etc/UTC"
 
-# This sends an HTTP-request to the URL in order to extract the actual date. If the request isn't succesful, an error message is displayed.
+#This sends an HTTP-request to the URL in order to extract the actual date. If the request isn't succesful, an error message is displayed.
 try:
     response = requests.get(url)
-    response.raise_for_status()  # Raise an HTTPError for bad responses
+    response.raise_for_status()  #Raise an HTTPError for bad responses
     data = response.json()
     today_date = data.get("datetime", "").split("T")[0]
 
