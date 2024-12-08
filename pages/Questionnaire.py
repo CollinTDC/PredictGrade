@@ -1,7 +1,7 @@
 import streamlit as st
 from streamlit_extras.switch_page_button import switch_page
 
-#(API Reference/Configutation - Streamlit Docs)
+#(API Reference/Configuration - Streamlit Docs)
 st.set_page_config(page_title="Questionnaire", layout="wide")
 
 # Title and disclaimer how the questionnaire is structured (API Reference/Text elements/Write and Magic - Streamlit Docs).
