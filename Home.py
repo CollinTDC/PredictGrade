@@ -9,12 +9,16 @@ from streamlit_extras.switch_page_button import switch_page
 #(API Reference/Configuration - Streamlit Docs)
 st.set_page_config(page_title="Home", layout="wide")
 
-# Session state to track and save responses
+#Session state to track and save responses
+#This code checks if the key 'responses' exists in 'st.session_state'.
+#If it doesn't, it initializes it as an empty list. This ensures that 'responses' is available for storing data during the session.
+#(API Reference/Caching and state - Streamlit Docs)
 if 'responses' not in st.session_state:
     st.session_state.responses = []
 
-# Title, Header and Markdown containing strings to welcome users to our Web-Application. 
-# At the bottom of the page, a button to navigate directly to the questionnaire is displayed, making the platform userfriendly to navigate.
+#Title, Header and Markdown containing strings to welcome users to our Web-Application. 
+#At the bottom of the page, a button to navigate directly to the questionnaire is displayed, making the platform userfriendly to navigate.
+#(API Reference/Text elements - Streamlit Docs)
 st.title("Welcome to GradeBoost! 🚀")
 st.header("Analyse and boost your semester performance")
 st.markdown("""
@@ -27,6 +31,6 @@ st.markdown("""
 *Good luck! 🍀*
 """)
 
-
+#(API Reference/Input Widgets/Navigation and pages - Streamlit Docs)
 if st.button("Go to Questionnaire"):
     switch_page("questionnaire")
