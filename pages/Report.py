@@ -56,53 +56,6 @@ if st.session_state.responses:
 
             st.write("Figure 1: Inputs vs. overall average")
 
-            # Define categories (these are based on the questions in the questionnaire) and Min/Max values
-            categories = [
-                "Age", 
-                "Parental Education", 
-                "Weekly Study Time", 
-                "Absences", 
-                "Parental Support",
-                "Tutoring",
-                "GPA",
-                "Sports",
-                "Music",
-                "Volunteering",
-                "Extracurricular Activities"
-            ]
-
-            # Define min and max values for each category
-            min_values = {
-                "Age": 15, 
-                "Parental Education": 0, 
-                "Weekly Study Time": 0, 
-                "Absences": 0, 
-                "Parental Support": 0,
-                "Tutoring": 0,
-                "GPA": 1,
-                "Sports": 0,
-                "Music": 0,
-                "Volunteering": 0,
-                "Extracurricular Activities": 0
-            }
-
-            max_values = {
-                "Age": 18, 
-                "Parental Education": 4, 
-                "Weekly Study Time": 25, 
-                "Absences": 30, 
-                "Parental Support": 4,
-                "Tutoring": 1,
-                "GPA": 6,
-                "Sports": 1,
-                "Music": 1,
-                "Volunteering": 1,
-                "Extracurricular Activities": 1
-            }
-
-            # Average values for comparison (you can adjust these based on your data)
-            average_values = [16.46864548, 1.746237458, 9.771991919, 14.54138796, 2.122074, 0.301421, 4, 0.303512, 0.196906, 0.157191, 0.383361]
-
             # Initialize session state for responses
             if 'responses' not in st.session_state:
                 st.session_state.responses = None  # Default to None if not filled out yet
@@ -121,16 +74,57 @@ if st.session_state.responses:
                     # User's values based on their inputs
                     user_values = [age, parental_degree_numeric, average_time, absences, support_numeric, tutoring_numeric, performance, sports, music, volunteering, extracurricular]
 
-                    # Define categories and normalization logic
-                    categories = ['Age', 'Parental Degree', 'Average Time', 'Absences', 'Support', 'Tutoring', 
-                                'Performance', 'Sports', 'Music', 'Volunteering', 'Extracurricular']
-                    average_values = [25, 1, 2.5, 5, 0.7, 0.5, 4, 0.3, 0.2, 0.4, 0.6]  # Example average values
-                    min_values = {'Age': 10, 'Parental Degree': 0, 'Average Time': 0, 'Absences': 0, 
-                                'Support': 0, 'Tutoring': 0, 'Performance': 1, 'Sports': 0, 
-                                'Music': 0, 'Volunteering': 0, 'Extracurricular': 0}
-                    max_values = {'Age': 50, 'Parental Degree': 2, 'Average Time': 5, 'Absences': 20, 
-                                'Support': 1, 'Tutoring': 1, 'Performance': 6, 'Sports': 1, 
-                                'Music': 1, 'Volunteering': 1, 'Extracurricular': 1}
+
+
+
+
+                    # Define categories (these are based on the questions in the questionnaire) and Min/Max values
+                    categories = [
+                        "Age", 
+                        "Parental Education", 
+                        "Weekly Study Time", 
+                        "Absences", 
+                        "Parental Support",
+                        "Tutoring",
+                        "GPA",
+                        "Sports",
+                        "Music",
+                        "Volunteering",
+                        "Extracurricular Activities"
+                    ]
+
+                    # Define min and max values for each category
+                    min_values = {
+                        "Age": 15, 
+                        "Parental Education": 0, 
+                        "Weekly Study Time": 0, 
+                        "Absences": 0, 
+                        "Parental Support": 0,
+                        "Tutoring": 0,
+                        "GPA": 1,
+                        "Sports": 0,
+                        "Music": 0,
+                        "Volunteering": 0,
+                        "Extracurricular Activities": 0
+                    }
+
+                    max_values = {
+                        "Age": 18, 
+                        "Parental Education": 4, 
+                        "Weekly Study Time": 25, 
+                        "Absences": 30, 
+                        "Parental Support": 4,
+                        "Tutoring": 1,
+                        "GPA": 6,
+                        "Sports": 1,
+                        "Music": 1,
+                        "Volunteering": 1,
+                        "Extracurricular Activities": 1
+                    }
+
+                    # Average values for comparison (you can adjust these based on your data)
+                    average_values = [16.46864548, 1.746237458, 9.771991919, 14.54138796, 2.122074, 0.301421, 4, 0.303512, 0.196906, 0.157191, 0.383361]
+
 
                     # Normalize the user values and the average values
                     def normalize(value, category):
