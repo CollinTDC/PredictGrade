@@ -70,18 +70,26 @@ if st.session_state.responses:
             if 'responses' not in st.session_state:
                 st.session_state.responses = None  #Default to None if not filled out yet, indicating no inputs have been provided yet
 
-            #Radar chart logic
+            #We use a radar chart to visualize the user's responses compared to the dataset averages.
+            #This type of chart is chosen because it provides an intuitive and user-friendly way to display multiple factors at once.
+            #Users (especially younger audiences) can easily understand where their inputs differ from the average (which was calculated based on the dataset, see Line xy).
+            #Additionally, we included a table next to the radar chart to provide precise numerical details.
+            #This allows users to see the specific differences from the average in a clear and structured format.
             try:
                 if st.session_state.responses:
                     try:
                         #Retrieve responses from session state
+                        #The code contains a sequence of instructions that only need to be controlled and stopped in the event of an error.
                         age, gender_numeric, parental_degree_numeric, average_time, absences, tutoring_numeric, support_numeric, extracurricular, sports, music, volunteering, performance = st.session_state.responses
                     except ValueError:
-                        # Handle error if unpacking fails (e.g., the list doesn't have 12 elements)
+                        #Handle error if unpacking fails (for example if the list doesn't have 12 elements)
+                        #
+                        #(API Reference/Status elements - Streamlit Docs)
                         st.error("Error: Incorrect number of responses or malformed data.")
-                        st.stop()  # Stop execution if the responses are malformed
+                        st.stop()  #Stop execution if the responses are malformed (API Reference/Execution flow - Streamlit Docs)
 
-                    #User's values based on their inputs
+                    #Combine the individual user inputs into a list for further analysis or visualization
+                    #This organized structure makes it easier to compare the user's data against averages
                     user_values = [age, parental_degree_numeric, average_time, absences, support_numeric, tutoring_numeric, performance, sports, music, volunteering, extracurricular]
 
                     #Define categories (these are based on the questions in the questionnaire) and Min/Max values
@@ -99,7 +107,7 @@ if st.session_state.responses:
                         "Extracurricular Activities"
                     ]
 
-                    # Define min and max values for each category
+                    #Define min and max values for each category
                     min_values = {
                         "Age": 15, 
                         "Parental Education": 0, 
