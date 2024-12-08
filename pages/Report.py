@@ -14,11 +14,14 @@ st.set_page_config(page_title="Report", layout="wide")
 st.title("Analysis of Results")
 st.markdown("---")
 
-
-#API to display current date, which is relevant if the student wants to track the progress of his predicted grades throughout the semester.
+#This API was selected for its free, reliable, and user-friendly access to current date and time across various time zones, including UTC.
+#It provides data in a straightforward JSON format and requires no authentication.
+#ChatGPT assisted in evaluating and implementing this API.
+#The API is useful for displaying the current date, which helps the student track the progress of predicted grades throughout the semester.
 url = "http://worldtimeapi.org/api/timezone/Etc/UTC"
 
 #This sends an HTTP-request to the URL in order to extract the actual date. If the request isn't succesful, an error message is displayed.
+#(supported by ChatGPT)
 try:
     response = requests.get(url)
     response.raise_for_status()  #Raise an HTTPError for bad responses
