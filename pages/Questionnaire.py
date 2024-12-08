@@ -37,8 +37,8 @@ average_time = st.slider("3. On average, how many hours per week do you study ou
 absences = st.slider("4. How many days were you absent from school in the last 6 months?", 0, 30, 0)
 
 # Yes/No question with radio buttons to get to know if the student claimed tutoring in the last 6 months.
-tutoring = st.radio("5. Have you received any tutoring in the last 6 months? Parental support is not included", ["Yes","No"])
-tutoring_mapping = {"Yes": 1, "No": 0}
+tutoring = st.radio("5. Have you received any tutoring in the last 6 months? Parental support is not included", ["No","Yes"])
+tutoring_mapping = {"No": 0, "Yes": 1}
 tutoring_numeric = tutoring_mapping[tutoring]
 
 # Slider to get to know about the students GPA. Grades between 1 and 6 can be chosen, the step size is defined at 0.05.
@@ -49,10 +49,16 @@ performance = st.slider("6. What is your current grade? ⚠️ *You can use your
 # Multiselector to select all extracurricular activities one participates in. The multiselector allows users to select more than 1 activity.
 # Each activity is weighted differently for the subsequent calculation of the predicted grade.
 st.subheader("Extracurricular Activities")
+
 activities = st.multiselect(
     "7. Which activities do you participate in? ⚠️ *You can choose up to 4!*",
     ["Sports", "Music", "Volunteering", "Other Extracurricular Activities (Theatre, Arts, etc.)"]
 )
+
+activities_mapping = {"Male": 0, "Female": 1}
+gender_numeric = activities_mapping[gender]
+
+
 sports = int("Sports" in activities)
 music = int("Music" in activities)
 volunteering = int("Volunteering" in activities)
