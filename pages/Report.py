@@ -428,30 +428,48 @@ else:
     # Message if the questionnaire has not been completed
     st.warning("Please complete the questionnaire to view your report.")
 
+
 st.markdown("---")
 
 st.subheader("Save Report")
-# Display the email input field
+# Display the email input field where the user can write his preferred email-adress.
+# We want to send a email with the user's predicted grade so that he/she can track the progress of the predicted grades over the semester.
+# The API being used here is from SendGrid, which is a service for sending emails.
+# The URL of the API is not written directly in the code.
+# Instead, the SendGrid Python library (SendGridAPIClient) takes care of this.
+# The library sends the request to the SendGrid URL "https://api.sendgrid.com/v3/mail/send" in the background.
+# We only need to provide the API key and the email details, and the library handles the rest.
 email = st.text_input("Please enter your email address to save your report.")
 
 import os
 
 st.write(os.getenv("MAIL_API"))
-# Display the button
+# The 'Submit' button is displayed.
+# As soon as the user wants to receive the mail with the predicted grade, he/she can press the 'Submit' button.
+# This triggers the delivery of the email through the SendGrid API.
 if st.button("Submit"):
     if email:
 
-        import os
+        # Here, we import the SendGridAPIClient class from the SendGrid python library.
+        # This is needed for the subsequent dispatch of the email via SendGrid API.
+        # Additionally, the Mail class from the helper modules of SendGrid is imported.
+        # The Mail class is used to create an email message.
+        # It can be used to define the sender, recipient, subject, and content of the email that is sent.
         from sendgrid import SendGridAPIClient
         from sendgrid.helpers.mail import Mail
         
-        # SendGrid API-Key
-        SENDGRID_API_KEY = os.getenv("SENDGRID_API_KEY")  # Auf SendGrid generierter API-Key
+        # The SendGrid API-Key is retrieved from an environment variable.
+        # Environment variables are stored in the operating system.
+        # This way, the API key is not written directly in the code.
+        # This was necessary because SendGrid would delete the API-Key if it was exposed publicly.
+        # The API-Key will be stored in the streamlit cloud and will be retrieved from there in order to successfully send the email.
+        SENDGRID_API_KEY = os.getenv("SENDGRID_API_KEY")  
         
-        # Funktion, um eine E-Mail zu senden
+        # Here, a new function in order to send the email is defined.
+        # It contains information about the sending email address, the receiver, subject and content of the email.
         def send_email(user_email, note):
             message = Mail(
-                from_email='gradeboostapp@gmail.com',  # Absenderadresse
+                from_email='gradeboostapp@gmail.com',  # The mail is sent from our own GradeBoost email-address.
                 to_emails=email,
                 subject='Deine prognostizierte Note',
                 html_content=f'''<strong>Deine prognostizierte Note beträgt: {note}</strong>
@@ -459,14 +477,21 @@ if st.button("Submit"):
                             Danke, dass du GradeBoost🚀 nutzt!'''
             )
             try:
+                # The API-Key is used to create an instance of the SendGrid API.
                 sg = SendGridAPIClient(SENDGRID_API_KEY)
+                
+                # The send method is called to send the email with all the information stored in the variable message.
                 response = sg.send(message)
+
+                # If the email is sent succesfully, the following message is displayed.
+                # If the email can't be sent, an error message is displayed.
                 st.write(f"E-Mail erfolgreich gesendet! Status Code: {response.status_code}")
             except Exception as e:
                 st.write(f"Fehler beim Senden der E-Mail: {e}")
         
-        # Mail wird gesendet, indem die Funktion aufgerufen wird
+        # The email function is called and triggers the dispatch of the email.
         send_email(email, predicted_grade)
 
     else:
         st.write("Please enter an email address.")
+
