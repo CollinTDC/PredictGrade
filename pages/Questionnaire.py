@@ -4,7 +4,7 @@ from streamlit_extras.switch_page_button import switch_page
 #(API Reference/Configuration - Streamlit Docs)
 st.set_page_config(page_title="Questionnaire", layout="wide")
 
-# Title and disclaimer how the questionnaire is structured (API Reference/Text elements/Write and Magic - Streamlit Docs).
+#Title and disclaimer how the questionnaire is structured (API Reference/Text elements/Write and Magic - Streamlit Docs).
 st.title("Questionnaire")
 st.write("To calculate your grade for the upcoming semester, please complete the questionnaire.")
 st.write("The questionnaire is divided into the following four sections:")
