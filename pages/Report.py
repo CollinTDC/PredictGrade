@@ -40,46 +40,51 @@ except ValueError:
 if 'responses' not in st.session_state:
     st.session_state.responses = None  #Default to None if not filled out yet
 
-# If statement to display report section only if responses from the questionnaire are available
+#If statement to display report section only if responses from the questionnaire are available
 if st.session_state.responses:
     try:
-        # Retrieve saved responses of the following questions from session state
+        #Retrieve saved responses of the following questions from session state
         age, gender_numeric, parental_degree_numeric, average_time, absences, tutoring_numeric, support_numeric, extracurricular, sports, music, volunteering, performance = st.session_state.responses
 
-        # Title of the report that will be displayed. Today's date will be extracted through the aforementioned API.
-        # The radar-chart will display the saved responses from the questionnaire and compare the responses to the overall average of each factor.
+        #Title of the report that will be displayed. Today's date will be extracted through the aforementioned API.
+        #The radar-chart will display the saved responses from the questionnaire and compare the responses to the overall average of each factor.
+        #(API Reference/Text elements/Write and magic - Streamlit Docs)
         st.subheader(f"Report of {today_date}")
         st.write("Below is a comparison of your inputs against the overall average (see Figure 1) and your predicted grade based on your inputs (see Figure 2).")
         st.write("")
         st.write("")
         st.markdown("<h5 style='font-size: 20px;'>Deviation From Averages</h5>", unsafe_allow_html=True)
 
-        # Generate a table with 2 columns
+        #Generate a table with 2 columns
+        #See later in line xy and line xy, where specific elements are placed
+        #(API Reference/Layouts and containters - Streamlit Docs)
         col1, col2 = st.columns(2)
 
         with col1:
+            #Corresponding title for Figure 1 in the first column
+            #(API Reference/Write and magic - Streamlit Docs)
 
             st.write("Figure 1: Inputs vs. overall average")
 
-            # Initialize session state for responses
+            #Check if responses exists in session state
             if 'responses' not in st.session_state:
-                st.session_state.responses = None  # Default to None if not filled out yet
+                st.session_state.responses = None  #Default to None if not filled out yet, indicating no inputs have been provided yet
 
-            # Radar chart logic
+            #Radar chart logic
             try:
                 if st.session_state.responses:
                     try:
-                        # Retrieve responses from session state
+                        #Retrieve responses from session state
                         age, gender_numeric, parental_degree_numeric, average_time, absences, tutoring_numeric, support_numeric, extracurricular, sports, music, volunteering, performance = st.session_state.responses
                     except ValueError:
                         # Handle error if unpacking fails (e.g., the list doesn't have 12 elements)
                         st.error("Error: Incorrect number of responses or malformed data.")
                         st.stop()  # Stop execution if the responses are malformed
 
-                    # User's values based on their inputs
+                    #User's values based on their inputs
                     user_values = [age, parental_degree_numeric, average_time, absences, support_numeric, tutoring_numeric, performance, sports, music, volunteering, extracurricular]
 
-                    # Define categories (these are based on the questions in the questionnaire) and Min/Max values
+                    #Define categories (these are based on the questions in the questionnaire) and Min/Max values
                     categories = [
                         "Age", 
                         "Parental Education", 
