@@ -35,9 +35,10 @@ except ValueError:
 
 
 
-# Initialize session state for responses
+#Initialize session state for responses
+#(API Reference/Caching and state - Streamlit Docs)
 if 'responses' not in st.session_state:
-    st.session_state.responses = None  # Default to None if not filled out yet
+    st.session_state.responses = None  #Default to None if not filled out yet
 
 # If statement to display report section only if responses from the questionnaire are available
 if st.session_state.responses:
