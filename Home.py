@@ -6,6 +6,7 @@ from joblib import load
 import plotly.express as px
 from streamlit_extras.switch_page_button import switch_page
 
+#(API Reference/Configuration - Streamlit Docs)
 st.set_page_config(page_title="Home", layout="wide")
 
 # Session state to track and save responses
