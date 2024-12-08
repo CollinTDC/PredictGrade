@@ -55,14 +55,10 @@ activities = st.multiselect(
     ["Sports", "Music", "Volunteering", "Other Extracurricular Activities (Theatre, Arts, etc.)"]
 )
 
-activities_mapping = {"Male": 0, "Female": 1}
-gender_numeric = activities_mapping[gender]
-
-
 sports = int("Sports" in activities)
 music = int("Music" in activities)
 volunteering = int("Volunteering" in activities)
-extracurricular = int("Extracurricular Activities" in activities)
+extracurricular = int("Other Extracurricular Activities (Theatre, Arts, etc.)" in activities)
 
 # Fourth section: Questions about Parental Support & Education, which also has influence on the students performance in school.
 # We use a Selectbox to rate the support the student gets from his parents regarding academic purposes. Ranging from No support to Very high support.
