@@ -5,6 +5,7 @@ import numpy as np
 import plotly.express as px
 from joblib import load
 import requests
+import os
 
 st.set_page_config(page_title="Report", layout="wide")
 
@@ -285,75 +286,88 @@ if st.session_state.responses:
         st.markdown("<h5 style='font-size: 20px;'>Grade Prediction</h5>", unsafe_allow_html=True)
 
 
+        # Here, we again create two colums that will be displayed side by side.
+        # The columns represent the data that is subsequently used to create a pie chart.
         col3, col4 = st.columns(2)
 
+        # We start working in the left column (col3)
         with col3:
+            # The title of the chart is added for increased overview.
             st.write("Figure 2: Predicted probabilities of grades")
 
+            # This if-statement is added to check check if the user has completed the questionnaire and the responses are saved in session state.
             if st.session_state.responses:
                 try:
-                    # Retrieve responses from session state
+                    # Here, we try to retrieve responses from session state.
+                    # Each variable correspondends to a specific question in the questionnaire.
                     age, gender_numeric, parental_degree_numeric, average_time, absences, tutoring_numeric, support_numeric, extracurricular, sports, music, volunteering, performance = st.session_state.responses
 
+                    # We define a function in order to convert swiss grades to US grades (4-scale-GPA) to comply with our API.
+                    
                     def swiss_to_us_gpa(swiss_grade):
                         return 2 + ((swiss_grade - 1) / 5) * 2
 
                     swiss_grade = performance  # Example Swiss grade
-                    us_gpa = swiss_to_us_gpa(swiss_grade)
+                    us_gpa = swiss_to_us_gpa(swiss_grade) # Here, the conversion ultimately takes place
 
                     scaler = load('scaler.pkl')  # Make sure to load the correct scaler (used during training)
 
-                    # Correct the new_data to have 12 features in each row
+                    # Step 1: We create a new input data array for predictions
+                    # The model expects 12 features, so we ensure all features are included
                     new_data = np.array([
                         [age, gender_numeric, parental_degree_numeric, average_time, absences, tutoring_numeric, support_numeric, extracurricular, sports, music, volunteering, us_gpa]
-                        # Add more rows for prediction if needed
                     ])
 
-                    # Step 2: Apply the scaling to new data (using the previously fitted scaler)
+                    # Step 2: The scaling to new data is applied(using the previously fitted scaler)
                     new_data_scaled = scaler.transform(new_data)  # Use transform to scale new data without fitting again
 
-                    # Step 3: Load the pre-trained model (if it's saved)
+                    # Step 3: If the pre-trained model is saved, we load define a new function to load it
+                    # The model file is reassembled from chunks
                     def reassemble_file(output_file, chunk_files):
                         with open(output_file, 'wb') as output:
                             for chunk_file in chunk_files:
                                 with open(chunk_file, 'rb') as file:
                                     output.write(file.read())
 
+                    # This is the list of model file chunks used to reassemble the model file
                     chunk_files = [
                         'random_forest_model.pkl.part0',
                         'random_forest_model.pkl.part1',
                         # Add other parts if applicable
                     ]
+                    # The reassembly takes place to create the full model file
                     reassemble_file('random_forest_model.pkl', chunk_files)
 
+                    # Our pre-trained random forest model is loaded
                     model = load('random_forest_model.pkl')  # Make sure to load the correct model
 
-                    # Step 4: Make predictions using the trained model
+                    # Step 4: The random forest model is used to predict grades based on the scaled input data
                     predictions = model.predict(new_data_scaled)
                     probabilities = model.predict_proba(new_data_scaled)
 
-                    # Step 6: Mapping grades to new values: 0 -> 6, 1 -> 5, 2 -> 4, 3 -> 3, 4 -> 2
+                    # Step 5: The grades are mapped to new values: 0 -> 6, 1 -> 5, 2 -> 4, 3 -> 3, 4 -> 2
+                    # Grades are mapped for better readability and more user-friendliness
                     grade_mapping = {0: "5.5-6", 1: "4.5-5", 2: 4, 3: "3-4", 4: "1-3"}
 
-                    # Step 7: Custom color palette: white -> gray -> red
-                    color_palette = ['#a3f0a3', '#c9f7c9', '#f4e1a1', '#f8b4b4', '#ff7373']  # From light green to pastel red
+                    # Step 6: To increase contrast and ultimately user-friendliness, custom colors for the pie chart are defined
+                    color_palette = ['#a3f0a3', '#c9f7c9', '#f4e1a1', '#f8b4b4', '#ff7373']  # The color palette ranges from light green to pastel red
 
-                    # Step 8: Output the predictions and probabilities and create pie charts
+                    # Step 7: The predictions and probabilities are used to create pie charts
                     import plotly.graph_objects as go
 
-                    # Create the pie chart using Plotly
+                    # Ultimately, we use plotly to create our pie chart
                     for i, (prediction, prob) in enumerate(zip(predictions, probabilities)):
                         
-                        # Map the grade labels
+                        # Here, we map labels to grades to provide the user with better readability
                         mapped_labels = [f'Grade: {grade_mapping[j]}' for j in range(len(prob))]
 
-                        # Get the highest probability and the corresponding grade
+                        # We find the grade with the highest probability according to data gathered in the questionnaire
                         max_prob_index = prob.argmax()  # Index of the highest probability
                         max_prob = prob[max_prob_index]  # The highest probability value
                         predicted_grade = grade_mapping[max_prob_index]  # The corresponding grade
 
-                        # Display the message with the highest probability grade
-                        # Create the pie chart
+                        # Now, we display the message with the highest probability grade
+                        # Subsequently, the pie chart is created with the predicted probabilities per grade
                         fig = go.Figure(data=[go.Pie(
                             labels=mapped_labels,
                             values=prob,
@@ -362,7 +376,8 @@ if st.session_state.responses:
                             hoverinfo='label+percent'
                         )])
 
-                        # Update the layout for better aesthetics
+                        # Now, the layout for better aesthetics
+                        # Again, this is for increased user-friendliness
                         fig.update_layout(
                             showlegend=False,
                             height=380,  # Adjust the height of the chart
@@ -370,18 +385,23 @@ if st.session_state.responses:
                             margin=dict(t=20, b=20, l=20, r=20)  # Set margins for a cleaner look
                         )
 
-                        # Display the Plotly pie chart in Streamlit
+                        # Now, the Plotly pie chart is displayed in Streamlit
                         st.plotly_chart(fig, use_container_width=True)
 
 
+                # If something goes wrong, an error message is displayed.
                 except Exception as e:
                     st.error(f"Error loading model or making predictions: {e}")
             else:
                 st.warning("Please complete the questionnaire first!")
 
 
+        # Now, we work in the right column (col4)
         with col4: 
-            # Feature importances data
+            # This dictionary contains the features (input variables) used in the model and their corresponding importance 
+            # The percentages show how much each feature contributes to the model's predictions
+            # For example, the 'GPA' feature contributes 46.36%, which means it's the most important factor for the prediction,
+            # 'Gender' on the orher hand only contributes 2.35%, making it less significant in the model's decision-making process
             data = {
                 'Feature': ['Age', 'Gender', 'ParentalEducation', 'StudyTimeWeekly', 'Absences', 
                             'Tutoring', 'ParentalSupport', 'Extracurricular', 'Sports', 'Music', 
@@ -389,43 +409,47 @@ if st.session_state.responses:
                 'Importance (%)': [4.71, 2.35, 4.61, 6.88, 19.69, 2.68, 6.28, 2.03, 2.01, 1.37, 1.02, 46.36]
             }
 
-            # Convert the data into a DataFrame
+            # The data is converted into a DataFrame
 
 
-                        # Initialize session state for button click
+            # If the button is clicked, session state is initialized
             if 'show_table1' not in st.session_state:
                 st.session_state['show_table1'] = False
 
-            # Button
+            # This button allows the user to toggle the visibility of the "Feature Importance" table.
+            # If 'show_table1' is True, the table is shown; if False, the table is hidden.
+            # This provides an interactive way for the user to view or hide the table as needed.
             if st.button("Table 2: Feature Importance"):
                 st.session_state['show_table1'] = not st.session_state['show_table1']
 
             if st.session_state['show_table1']:
+                # The data is converted into a data frame and also sorted by importance (%) in descending order
                 df = pd.DataFrame(data)
                 df_sorted = df.sort_values(by='Importance (%)', ascending=False)
 
-                # Format the DataFrame to display one decimal point
+                # Here, the DataFrame is formatted to display one decimal point for easier readability
                 df_formatted = df_sorted.set_index('Feature').style.format("{:.1f}", subset=['Importance (%)'])
 
-                # Display the formatted table in Streamlit
+                # Ultimately, the formatted table is displayed in Streamlit
                 st.table(df_formatted)
 
             else:
+                # The user is informed that he can click the button to display the full table
+                # The table is not displayed by default for aesthetic reasons
                 st.info("Click the button to display the table.")
 
-
-            # Sort the DataFrame by 'Importance (%)' in descending order
-
-        # Display the table in Streamlit without the index
-
+        # Now, we display the final prediction and explain how the prediction is calculated
+        # This is tho show the user that the grade prediction is not random, but based on his data
         st.write(f"Based on the provided inputs, the model predicts a {max_prob:.1%} likelihood that your grade will be {predicted_grade}. This prediction is derived from an extensive analysis of historical performance data. Each feature contributes differently to predicting your grade. Focus on improving the most impactful ones for better results. Our tests show that the model achieves an accuracy of 91.02%, indicating a strong ability to predict outcomes reliably.")
 
 
+    # If something goes wrong, the user is provided with an error message
     except ValueError:
         # Handle error if unpacking fails (e.g., the list doesn't have 12 elements)
         st.error("Error: Incorrect number of responses or malformed data.")
+
+# If the questionnaire has not been completed correctly, the user is informed that all questions must be answered in order to get a report
 else:
-    # Message if the questionnaire has not been completed
     st.warning("Please complete the questionnaire to view your report.")
 
 
@@ -440,8 +464,6 @@ st.subheader("Save Report")
 # The library sends the request to the SendGrid URL "https://api.sendgrid.com/v3/mail/send" in the background.
 # We only need to provide the API key and the email details, and the library handles the rest.
 email = st.text_input("Please enter your email address to save your report.")
-
-import os
 
 st.write(os.getenv("MAIL_API"))
 # The 'Submit' button is displayed.
