@@ -83,7 +83,7 @@ if st.session_state.responses:
                         age, gender_numeric, parental_degree_numeric, average_time, absences, tutoring_numeric, support_numeric, extracurricular, sports, music, volunteering, performance = st.session_state.responses
                     except ValueError:
                         #Handle error if unpacking fails (for example if the list doesn't have 12 elements)
-                        #
+                        #(Python 8.3 documentation)
                         #(API Reference/Status elements - Streamlit Docs)
                         st.error("Error: Incorrect number of responses or malformed data.")
                         st.stop()  #Stop execution if the responses are malformed (API Reference/Execution flow - Streamlit Docs)
@@ -108,6 +108,9 @@ if st.session_state.responses:
                     ]
 
                     #Define min and max values for each category
+                    #These min values are derived from the dataset and represent the lowest possible valid inputs for each category.
+                    #They act as lower boundaries to ensure that user inputs fall within a realistic range, based on the dataset.
+                    #While users can select values between these boundaries, the min values help validate inputs and normalize data for visualization purposes, see line xy.
                     min_values = {
                         "Age": 15, 
                         "Parental Education": 0, 
@@ -121,7 +124,9 @@ if st.session_state.responses:
                         "Volunteering": 0,
                         "Extracurricular Activities": 0
                     }
-
+                    #These max values are derived from the dataset and represent the highest possible valid inputs for each category.
+                    #They act as upper boundaries to ensure that user inputs fall within a realistic range, based on the dataset.
+                    #While users can select values between these boundaries, the max values help validate inputs and normalize data for visualization purposes, see line xy.
                     max_values = {
                         "Age": 18, 
                         "Parental Education": 4, 
@@ -136,24 +141,26 @@ if st.session_state.responses:
                         "Extracurricular Activities": 1
                     }
 
-                    # Average values for comparison (you can adjust these based on your data)
+                    #Average values for comparison (you can adjust these based on your data)
+                    #These values were derived from the dataset. All data was exported to an Excel sheet, where averages were calculated for each category.
+                    #These averages serve as a baseline to compare the user's inputs against the overall trends in the dataset.
                     average_values = [16.46864548, 1.746237458, 9.771991919, 14.54138796, 2.122074, 0.301421, 4, 0.303512, 0.196906, 0.157191, 0.383361]
 
 
-                    # Normalize the user values and the average values
+                    #Normalize the user values and the average values
                     def normalize(value, category):
                         return (value - min_values[category]) / (max_values[category] - min_values[category])
 
-                    # Apply normalization
+                    #Apply normalization
                     normalized_user_values = [normalize(value, category) for value, category in zip(user_values, categories)]
                     normalized_average_values = [normalize(value, category) for value, category in zip(average_values, categories)]
 
-                    # Close the radar chart by adding the first category again
+                    #Close the radar chart by adding the first category again
                     categories += [categories[0]]
                     normalized_user_values += [normalized_user_values[0]]
                     normalized_average_values += [normalized_average_values[0]]
 
-                    # Create DataFrames for both user inputs and average values
+                    #Create DataFrames for both user inputs and average values
                     df_user = pd.DataFrame({
                         'Category': categories,
                         'Value': normalized_user_values,
@@ -166,10 +173,10 @@ if st.session_state.responses:
                         'Type': ['Average'] * len(categories)
                     })
 
-                    # Combine both DataFrames
+                    #Combine both DataFrames
                     df_combined = pd.concat([df_average, df_user])
 
-                    # Plot radar chart using Plotly
+                    #Plot radar chart using Plotly
                     fig = px.line_polar(
                         df_combined, 
                         r='Value', 
@@ -178,7 +185,7 @@ if st.session_state.responses:
                         line_close=True
                     )
 
-                    # Customize radar chart appearance
+                    #Customize radar chart appearance
                     fig.update_layout(
                         polar=dict(
                             bgcolor="white",  
@@ -192,7 +199,7 @@ if st.session_state.responses:
                         ),
                     )
 
-                    # Set fill color for user input and average areas
+                    #Set fill color for user input and average areas
                     fig.update_traces(
                         fill='toself',
                         fillcolor="rgba(180, 180, 180, 0.4)",  
@@ -207,7 +214,7 @@ if st.session_state.responses:
                         selector=dict(name="Your Inputs")
                     )
 
-                    # Display chart
+                    #Display chart
                     st.plotly_chart(fig, use_container_width=True)
                 else:
                     st.warning("Please fill out the questionnaire first.")
@@ -217,7 +224,7 @@ if st.session_state.responses:
 
         with col2:
 
-            # Average values (replace with your actual average values)
+            #Average values (replace with your actual average values)
             average_values = [
                 16.46864548,  # Age
                 1.746237458,  # Parental Education
@@ -232,7 +239,7 @@ if st.session_state.responses:
                 0.383361      # Extracurricular Activities
             ]
 
-            # Categories corresponding to the average values
+            #Categories corresponding to the average values
             categories = [
                 "Age", 
                 "Parental Education", 
@@ -247,9 +254,9 @@ if st.session_state.responses:
                 "Extracurricular Activities"
             ]
 
-            # Assuming `age`, `parental_degree_numeric`, `average_time`, etc. are defined elsewhere in your code
+            #Assuming `age`, `parental_degree_numeric`, `average_time`, etc. are defined elsewhere in your code
 
-            # Example inputs (replace with actual values from your user input)
+            #Example inputs (replace with actual values from your user input)
             user_input_values = [
                 age,  # Age
                 parental_degree_numeric,  # Parental Education
