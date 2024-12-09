@@ -317,7 +317,7 @@ if st.session_state.responses:
                     # Each variable correspondends to a specific question in the questionnaire.
                     age, gender_numeric, parental_degree_numeric, average_time, absences, tutoring_numeric, support_numeric, extracurricular, sports, music, volunteering, performance = st.session_state.responses
 
-                    # We define a function in order to convert swiss grades to US grades (4-scale-GPA) to comply with our API.
+                    # We define a function in order to convert swiss grades to US grades (4-scale-GPA) to comply with our GitHub-API.
                     
                     def swiss_to_us_gpa(swiss_grade):
                         return 2 + ((swiss_grade - 1) / 5) * 2
@@ -360,7 +360,7 @@ if st.session_state.responses:
                     predictions = model.predict(new_data_scaled)
                     probabilities = model.predict_proba(new_data_scaled)
 
-                    #  The grades are mapped to new values: 0 -> 6, 1 -> 5, 2 -> 4, 3 -> 3, 4 -> 2
+                    # The grades are mapped to new values: 0 -> 6, 1 -> 5, 2 -> 4, 3 -> 3, 4 -> 2
                     # Grades are mapped for better readability and more user-friendliness
                     grade_mapping = {0: "5.5-6", 1: "4.5-5", 2: 4, 3: "3-4", 4: "1-3"}
 
@@ -478,6 +478,7 @@ st.subheader("Save Report")
 # Instead, the SendGrid Python library (SendGridAPIClient) takes care of this.
 # The library sends the request to the SendGrid URL "https://api.sendgrid.com/v3/mail/send" in the background.
 # We only need to provide the API key and the email details, and the library handles the rest.
+# ChatGPT assisted us in the implementation of this API, mainly in error solving.
 email = st.text_input("Please enter your email address to save your report.")
 
 st.write(os.getenv("MAIL_API"))
