@@ -327,16 +327,16 @@ if st.session_state.responses:
 
                     scaler = load('scaler.pkl')  # Make sure to load the correct scaler (used during training)
 
-                    # Step 1: We create a new input data array for predictions
+                    # We create a new input data array for predictions
                     # The model expects 12 features, so we ensure all features are included
                     new_data = np.array([
                         [age, gender_numeric, parental_degree_numeric, average_time, absences, tutoring_numeric, support_numeric, extracurricular, sports, music, volunteering, us_gpa]
                     ])
 
-                    # Step 2: The scaling to new data is applied(using the previously fitted scaler)
+                    #  The scaling to new data is applied(using the previously fitted scaler)
                     new_data_scaled = scaler.transform(new_data)  # Use transform to scale new data without fitting again
 
-                    # Step 3: If the pre-trained model is saved, we load define a new function to load it
+                    #  If the pre-trained model is saved, we load define a new function to load it
                     # The model file is reassembled from chunks
                     def reassemble_file(output_file, chunk_files):
                         with open(output_file, 'wb') as output:
@@ -356,18 +356,18 @@ if st.session_state.responses:
                     # Our pre-trained random forest model is loaded
                     model = load('random_forest_model.pkl')  # Make sure to load the correct model
 
-                    # Step 4: The random forest model is used to predict grades based on the scaled input data
+                    # The random forest model is used to predict grades based on the scaled input data
                     predictions = model.predict(new_data_scaled)
                     probabilities = model.predict_proba(new_data_scaled)
 
-                    # Step 5: The grades are mapped to new values: 0 -> 6, 1 -> 5, 2 -> 4, 3 -> 3, 4 -> 2
+                    #  The grades are mapped to new values: 0 -> 6, 1 -> 5, 2 -> 4, 3 -> 3, 4 -> 2
                     # Grades are mapped for better readability and more user-friendliness
                     grade_mapping = {0: "5.5-6", 1: "4.5-5", 2: 4, 3: "3-4", 4: "1-3"}
 
-                    # Step 6: To increase contrast and ultimately user-friendliness, custom colors for the pie chart are defined
+                    # To increase contrast and ultimately user-friendliness, custom colors for the pie chart are defined
                     color_palette = ['#a3f0a3', '#c9f7c9', '#f4e1a1', '#f8b4b4', '#ff7373']  # The color palette ranges from light green to pastel red
 
-                    # Step 7: The predictions and probabilities are used to create pie charts
+                    # The predictions and probabilities are used to create pie charts
                     import plotly.graph_objects as go
 
                     # Ultimately, we use plotly to create our pie chart
